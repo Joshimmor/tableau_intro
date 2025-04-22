@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ExtensionManifest xmlns="http://tableau.com/xml/extension_manifest">
+  <Version>1.0</Version>
+  <Name>User Location Fetcher</Name>
+  <Author>
+    <Name>Your Name</Name>
+    <Email>you@example.com</Email>
+    <Company>Personal Project</Company>
+  </Author>
+  <Description>Fetches user geolocation and displays it inside a Tableau dashboard.</Description>
+  <HomepageUrl>http://localhost:8888/</HomepageUrl>
+  <SourceLocation>
+    <Url>http://localhost:8888/index.html</Url>
+  </SourceLocation>
+  <Runtime>
+    <Scripts>
+      <Script>https://tableau.github.io/extensions-api/lib/tableau.extensions.1.latest.js</Script>
+    </Scripts>
+  </Runtime>
+  <Permissions>
+    <Permission>geolocation</Permission>
+  </Permissions>
+</ExtensionManifest>
+
