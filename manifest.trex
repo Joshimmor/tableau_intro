@@ -3,14 +3,14 @@
   <Version>1.0</Version>
   <Name>User Location Fetcher</Name>
   <Author>
-    <Name>Your Name</Name>
+    <Name>Josh Immordino</Name>
     <Email>you@example.com</Email>
     <Company>Personal Project</Company>
   </Author>
   <Description>Fetches user geolocation and displays it inside a Tableau dashboard.</Description>
-  <HomepageUrl>http://localhost:8888/</HomepageUrl>
+  <HomepageUrl>https://joshimmor.github.io/tableau_intro/</HomepageUrl>
   <SourceLocation>
-    <Url>http://localhost:8888/index.html</Url>
+    <Url>https://joshimmor.github.io/tableau_intro/index.html</Url>
   </SourceLocation>
   <Runtime>
     <Scripts>
