@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ExtensionManifest xmlns="http://tableau.com/xml/extension_manifest">
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionManifest xmlns="http://tableau.com/xml/schemas/extension/20180206">
   <Version>1.0</Version>
   <Name>User Location Fetcher</Name>
   <Author>
@@ -21,4 +21,3 @@
     <Permission>geolocation</Permission>
   </Permissions>
 </ExtensionManifest>
-
