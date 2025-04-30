@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Get User Location - Tableau Extension</title>
-    <script src="./lib/tableau.extensions.1.latest.js"></script>
-    <script
-  src="https://code.jquery.com/jquery-3.7.1.min.js"
-  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-  crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <title>Get User Location - Tableau Extension</title>
+  <script src="https://tableau.github.io/extensions-api/lib/tableau.extensions.1.latest.js"></script>
 </head>
 <body>
-    <h2>User Location</h2>
-    <p id="location">Locating...</p>
+  <h2>User Location</h2>
+  <p id="location">Initializing...</p>
 
-    <script>
-        $(document).ready(function(){
-        tableau.extensions.initializeAsync().then(function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        const lat = position.coords.latitude.toFixed(6);
-                        const lng = position.coords.longitude.toFixed(6);
-                        document.getElementById('location').textContent = `Latitude: ${lat}, Longitude: ${lng}`;
-                    },
-                    function (error) {
-                        document.getElementById('location').textContent = `Error getting location: ${error.message}`;
-                    }
-                );
-            } else {
-                document.getElementById('location').textContent = "Geolocation is not supported by this browser.";
-            }
-        })
-    })
-    </script>
+  <script>
+    const output = document.getElementById('location');
+    const log = (...args) => {
+      console.log('[DEBUG]', ...args);
+    };
+
+    function showPosition(position) {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      output.textContent = `Latitude: ${lat}, Longitude: ${lng}`;
+      log('Got position:', lat, lng);
+    }
+
+    function showError(error) {
+      output.textContent = `Error: ${error.message}`;
+      log('Geolocation error:', error.message);
+    }
+
+    function getGeolocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        output.textContent = "Geolocation not supported.";
+      }
+    }
+
+    // Run only if we're in Tableau
+    if (window.tableau) {
+      tableau.extensions.initializeAsync().then(() => {
+        log('Running inside Tableau');
+        getGeolocation();
+      }).catch(err => {
+        output.textContent = `Extension failed to initialize: ${err.message}`;
+        log('Initialization error:', err);
+      });
+    } else {
+      log('⚠️ Not running inside Tableau. Skipping initializeAsync.');
+      output.textContent = "This extension must be run in Tableau.";
+    }
+  </script>
+</body>
+</html>
 </body>
 </html>
 
