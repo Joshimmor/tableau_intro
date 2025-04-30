@@ -10,32 +10,46 @@
 <body>
   <h2>User Location</h2>
   <p id="location">Initializing...</p>
-<script>
-  const output = document.getElementById('location');
-  const log = (...args) => console.log('[DEBUG]', ...args);
 
-  // Try to dynamically load the Tableau JS API
-  const script = document.createElement("script");
-  script.src = "https://tableau.github.io/extensions-api/lib/tableau.extensions.1.latest.js";
-  script.onload = () => {
+  <script>
+    const output = document.getElementById('location');
+    const log = (...args) => {
+      console.log('[DEBUG]', ...args);
+    };
+
+    function showPosition(position) {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      output.textContent = `Latitude: ${lat}, Longitude: ${lng}`;
+      log('Got position:', lat, lng);
+    }
+
+    function showError(error) {
+      output.textContent = `Error: ${error.message}`;
+      log('Geolocation error:', error.message);
+    }
+
+    function getGeolocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        output.textContent = "Geolocation not supported.";
+      }
+    }
+
+    // Run only if we're in Tableau
     if (window.tableau) {
       tableau.extensions.initializeAsync().then(() => {
-        log("✅ Inside Tableau");
-        output.textContent = "Extension loaded inside Tableau.";
+        log('Running inside Tableau');
+        getGeolocation();
+      }).catch(err => {
+        output.textContent = `Extension failed to initialize: ${err.message}`;
+        log('Initialization error:', err);
       });
     } else {
-      log("⚠️ Tableau object not found after script load.");
-      output.textContent = "Failed to initialize: no Tableau object.";
+      log('⚠️ Not running inside Tableau. Skipping initializeAsync.');
+      output.textContent = "This extension must be run in Tableau.";
     }
-  };
-  script.onerror = () => {
-    output.textContent = "Failed to load Tableau Extensions API.";
-    log("❌ Could not load Extensions API");
-  };
-  document.head.appendChild(script);
-</script>
-
+  </script>
 </body>
 </html>
-
-
