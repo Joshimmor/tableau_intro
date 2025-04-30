@@ -7,7 +7,7 @@
     <Email>you@example.com</Email>
     <Company>Personal Project</Company>
   </Author>
-  <Description>Fetches user geolocation and displays it inside a Tableau dashboard.</Description>
+  <Description>Fetches user geolocation and displays it in a Tableau dashboard.</Description>
   <HomepageUrl>https://joshimmor.github.io/tableau_intro/</HomepageUrl>
   <SourceLocation>
     <Url>https://joshimmor.github.io/tableau_intro/index.html</Url>
