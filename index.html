@@ -50,6 +50,7 @@
 
     const birdData = await birdRes.json();
     birdList.innerHTML = "";
+    getBirdData(birdData[0].comName)
     birdData.forEach(bird => {
       const li = document.createElement('li');
       li.textContent = `${bird.comName} seen at ${bird.locName}`;
@@ -58,8 +59,24 @@
   } catch (err) {
     locationStatus.textContent = "❌ Error: " + err.message;
   }
+    
 });
-
+function getBirdData(name){
+  const key = "e558c1b4-c686-4607-8808-6f2a3a2d4279"
+  const birdInfo = wait fetch("https://nuthatch.lastelm.software/v2/birds?name="+name,
+    {  
+      headers:{
+           'api-key': key            
+        }
+    }).then((res) => {
+      if (!response.ok) {
+        throw new Error('Network response was not OK');
+      }
+      return response.json();
+    }).then((data) =>{
+        console.log(data);
+    })
+}
 
     // Run only if we're in Tableau
     if (window.tableau) {
