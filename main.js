@@ -37,7 +37,7 @@ const locationStatus = document.getElementById('locationStatus');
         localBirdData.push(nearByBird)
     })
     localBirdData.forEach( bird =>{
-        console.log(bird)
+        console.log(bird.status)
     })
   } catch (err) {
     locationStatus.textContent = "❌ Error: " + err.message;
