@@ -31,6 +31,7 @@
 
     function getGeolocation() {
       if ('geolocation' in navigator) {
+        output.textContent = "Geolocation Supported";
         navigator.geolocation.getCurrentPosition(showPosition, showError);
       } else {
         output.textContent = "Geolocation not supported.";
