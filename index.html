@@ -69,10 +69,10 @@ async function getBirdData(name){
            'api-key': key            
         }
     }).then((res) => {
-      if (!response.ok) {
+      if (!res.ok) {
         throw new Error('Network response was not OK');
       }
-      return response.json();
+      return res.json();
     }).then((data) =>{
         console.log(data);
     }).catch(err => console.error(err))
