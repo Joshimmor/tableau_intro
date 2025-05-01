@@ -28,7 +28,7 @@ const locationStatus = document.getElementById('locationStatus');
             location : bird.locName,
             volume : bird.howMany,
             lat : bird.lat,
-            long : bird.long,
+            long : bird.lng,
             image : birdInfo.images[0] ? birdInfo.images[0]:"",
             family : birdInfo.family,
             status : birdInfo.status,
@@ -38,8 +38,8 @@ const locationStatus = document.getElementById('locationStatus');
     })
 
     localBirdData.forEach( bird =>{
-        console.log("Bird Found")
-        console.log(bird.status)
+   
+        console.log(bird.status,bird.birdName)
     })
   } catch (err) {
     locationStatus.textContent = "❌ Error: " + err.message;
