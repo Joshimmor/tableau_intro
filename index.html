@@ -82,7 +82,6 @@ async function getBirdData(name){
     if (window.tableau) {
       tableau.extensions.initializeAsync().then(() => {
         log('Running inside Tableau');
-        getGeolocation();
       }).catch(err => {
         output.textContent = `Extension failed to initialize: ${err.message}`;
         log('Initialization error:', err);
