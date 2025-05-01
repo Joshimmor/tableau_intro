@@ -42,7 +42,7 @@
     locationStatus.textContent = `📍 Lat: ${latitude}, Lon: ${longitude}`;
 
     // Now fetch birds from eBird
-    const birdRes = await fetch(`https://api.ebird.org/v2/data/obs/geo/recent?back=5&dist=2&lat=${latitude}&lng=${longitude}`, {
+    const birdRes = await fetch(`https://api.ebird.org/v2/data/obs/geo/recent?back=1&dist=2&lat=${latitude}&lng=${longitude}`, {
       headers: {
         "X-eBirdApiToken": "2sfdah9jaj1k"
       }
