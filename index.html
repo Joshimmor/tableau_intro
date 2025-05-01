@@ -18,6 +18,7 @@
     };
 
     function showPosition(position) {
+      output.textContent = "Position Recieved"; 
       const lat = position.coords.latitude.toFixed(6);
       const lng = position.coords.longitude.toFixed(6);
       output.textContent = `Latitude: ${lat}, Longitude: ${lng}`;
