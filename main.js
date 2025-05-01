@@ -1,15 +1,5 @@
 let localBirdData = [];
-const columns = [
-  { id: "birdName", dataType: tableau.dataTypeEnum.string },
-  { id: "location", dataType: tableau.dataTypeEnum.string },
-  { id: "volume", dataType: tableau.dataTypeEnum.int},
-  { id: "lat", dataType: tableau.dataTypeEnum.float },
-  { id: "long", dataType: tableau.dataTypeEnum.float },
-  { id: "image", dataType: tableau.dataTypeEnum.string },
-  { id: "family", dataType: tableau.dataTypeEnum.string },
-  { id: "status", dataType: tableau.dataTypeEnum.string },
-  { id: "wingspan", dataType: tableau.dataTypeEnum.float }
-];
+const columns = []
 document.getElementById('fetchBirdsBtn').addEventListener('click', async () => {
 const zip = document.getElementById('zipInput').value.trim();
 const locationStatus = document.getElementById('locationStatus');
@@ -91,6 +81,17 @@ function main(){
         tableau.extensions.initializeAsync().then(() => {
             log('Running inside Tableau');
             const dataTable = new tableau.Table(columns);
+            columns = [
+              { id: "birdName", dataType: tableau.dataTypeEnum.string },
+              { id: "location", dataType: tableau.dataTypeEnum.string },
+              { id: "volume", dataType: tableau.dataTypeEnum.int},
+              { id: "lat", dataType: tableau.dataTypeEnum.float },
+              { id: "long", dataType: tableau.dataTypeEnum.float },
+              { id: "image", dataType: tableau.dataTypeEnum.string },
+              { id: "family", dataType: tableau.dataTypeEnum.string },
+              { id: "status", dataType: tableau.dataTypeEnum.string },
+              { id: "wingspan", dataType: tableau.dataTypeEnum.float }
+            ];
         }).catch(err => {
             output.textContent = `Extension failed to initialize: ${err.message}`;
             log('Initialization error:', err);
