@@ -63,7 +63,7 @@
 });
 async function getBirdData(name){
   const key = "e558c1b4-c686-4607-8808-6f2a3a2d4279"
-  const birdInfo = wait fetch("https://nuthatch.lastelm.software/v2/birds?name="+name,
+  const birdInfo = await fetch("https://nuthatch.lastelm.software/v2/birds?name="+name,
     {  
       headers:{
            'api-key': key            
