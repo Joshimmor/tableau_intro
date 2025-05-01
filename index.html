@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Get User Location - Tableau Extension</title>
- <script type="text/javascript" 
-  src="./tableau.extensions.1.latest.min.js">
-</script>
+ <script type="text/javascript" src="./tableau.extensions.1.latest.min.js"></script>
+ <script type="text/javascript" src="main.js"></script>
 </head>
 <body>
   <h2>Enter ZIP Code</h2>
@@ -16,80 +15,5 @@
 <p id="location"></p>
 <ul id="birdList"></ul>
 
-  <script>
-    const output = document.getElementById('location');
-    const log = (...args) => {
-      console.log('[DEBUG]', ...args);
-    };
-    document.getElementById('fetchBirdsBtn').addEventListener('click', async () => {
-    const zip = document.getElementById('zipInput').value.trim();
-    const locationStatus = document.getElementById('locationStatus');
-    const birdList = document.getElementById('birdList');
-  
-    if (!zip) {
-      locationStatus.textContent = "❗ Please enter a ZIP code.";
-      return;
-    }
-
-  locationStatus.textContent = "📍 Looking up location...";
-
-  try {
-    const geoRes = await fetch(`https://api.zippopotam.us/us/${zip}`);
-    if (!geoRes.ok) throw new Error("Invalid ZIP");
-
-    const geoData = await geoRes.json();
-    const { latitude, longitude } = geoData.places[0];
-    locationStatus.textContent = `📍 Lat: ${latitude}, Lon: ${longitude}`;
-
-    // Now fetch birds from eBird
-    const birdRes = await fetch(`https://api.ebird.org/v2/data/obs/geo/recent?back=1&dist=2&lat=${latitude}&lng=${longitude}`, {
-      headers: {
-        "X-eBirdApiToken": "2sfdah9jaj1k"
-      }
-    });
-
-    const birdData = await birdRes.json();
-    birdList.innerHTML = "";
-    getBirdData(birdData[0].comName)
-    birdData.forEach(bird => {
-      const li = document.createElement('li');
-      li.textContent = `${bird.comName} seen at ${bird.locName}`;
-      birdList.appendChild(li);
-    });
-  } catch (err) {
-    locationStatus.textContent = "❌ Error: " + err.message;
-  }
-    
-});
-async function getBirdData(name){
-  const key = "e558c1b4-c686-4607-8808-6f2a3a2d4279"
-  const birdInfo = await fetch("https://nuthatch.lastelm.software/v2/birds?name="+name,
-    {  
-      headers:{
-           'api-key': key            
-        }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error('Network response was not OK');
-      }
-      return res.json();
-    }).then((data) =>{
-        console.log(data);
-    }).catch(err => console.error(err))
-}
-
-    // Run only if we're in Tableau
-    if (window.tableau) {
-      tableau.extensions.initializeAsync().then(() => {
-        log('Running inside Tableau');
-      }).catch(err => {
-        output.textContent = `Extension failed to initialize: ${err.message}`;
-        log('Initialization error:', err);
-      });
-    } else {
-      log('⚠️ Not running inside Tableau. Skipping initializeAsync.');
-      output.textContent = "This extension must be run in Tableau.";
-    }
-  </script>
 </body>
 </html>
