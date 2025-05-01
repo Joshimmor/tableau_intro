@@ -1,3 +1,4 @@
+let localBirdData = [];
 document.getElementById('fetchBirdsBtn').addEventListener('click', async () => {
 const zip = document.getElementById('zipInput').value.trim();
 const locationStatus = document.getElementById('locationStatus');
@@ -21,12 +22,23 @@ const locationStatus = document.getElementById('locationStatus');
     const birdData = await birdRes.json();
 
     birdData.forEach(async bird => {
-      let birdName = bird.comName;
-      let location = bird.locName
-      let birdInfo = await getBirdData(bird.comName);
-      console.log(birdInfo)
-
-    });
+        let birdInfo = await getBirdData(bird.comName);
+        let nearByBird = {
+            birdName : bird.comName,
+            location : bird.locName,
+            volume : bird.howMany,
+            lat : bird.lat,
+            long : bird.long,
+            image : birdInfo.images[0] ? birdInfo.images[0]:"",
+            family : birdInfo.family,
+            status : birdInfo.status,
+            wingSpan : birdInfo.wingspanMax
+        }
+        localBirdData.push(nearByBird)
+    })
+    localBirdData.forEach( bird =>{
+        console.log(bird)
+    })
   } catch (err) {
     locationStatus.textContent = "❌ Error: " + err.message;
   } 
