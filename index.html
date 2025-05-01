@@ -8,36 +8,58 @@
 </script>
 </head>
 <body>
-  <h2>User Location</h2>
-  <p id="location">Initializing...</p>
+  <h2>Enter ZIP Code</h2>
+  <input type="text" id="zipInput" placeholder="e.g. 10001" />
+  <button id="fetchBirdsBtn">Fetch Birds</button>
+
+<p id="locationStatus">Waiting for input...</p>
+<p id="location"></p>
+<ul id="birdList"></ul>
 
   <script>
     const output = document.getElementById('location');
     const log = (...args) => {
       console.log('[DEBUG]', ...args);
     };
-
-    function showPosition(position) {
-      output.textContent = "Position Recieved"; 
-      const lat = position.coords.latitude.toFixed(6);
-      const lng = position.coords.longitude.toFixed(6);
-      output.textContent = `Latitude: ${lat}, Longitude: ${lng}`;
-      log('Got position:', lat, lng);
+    document.getElementById('fetchBirdsBtn').addEventListener('click', async () => {
+    const zip = document.getElementById('zipInput').value.trim();
+    const locationStatus = document.getElementById('locationStatus');
+    const birdList = document.getElementById('birdList');
+  
+    if (!zip) {
+      locationStatus.textContent = "❗ Please enter a ZIP code.";
+      return;
     }
 
-    function showError(error) {
-      output.textContent = `Error: ${error.message}`;
-      log('Geolocation error:', error.message);
-    }
+  locationStatus.textContent = "📍 Looking up location...";
 
-    function getGeolocation() {
-      if ('geolocation' in navigator) {
-        output.textContent = "Geolocation Supported";
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-      } else {
-        output.textContent = "Geolocation not supported.";
+  try {
+    const geoRes = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!geoRes.ok) throw new Error("Invalid ZIP");
+
+    const geoData = await geoRes.json();
+    const { latitude, longitude } = geoData.places[0];
+    locationStatus.textContent = `📍 Lat: ${latitude}, Lon: ${longitude}`;
+
+    // Now fetch birds from eBird
+    const birdRes = await fetch(`https://api.ebird.org/v2/data/obs/geo/recent?lat=${latitude}&lng=${longitude}`, {
+      headers: {
+        "X-eBirdApiToken": "2sfdah9jaj1k"
       }
-    }
+    });
+
+    const birdData = await birdRes.json();
+    birdList.innerHTML = "";
+    birdData.forEach(bird => {
+      const li = document.createElement('li');
+      li.textContent = `${bird.comName} seen at ${bird.locName}`;
+      birdList.appendChild(li);
+    });
+  } catch (err) {
+    locationStatus.textContent = "❌ Error: " + err.message;
+  }
+});
+
 
     // Run only if we're in Tableau
     if (window.tableau) {
