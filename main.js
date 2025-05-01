@@ -1,4 +1,15 @@
 let localBirdData = [];
+const columns = [
+  { id: "birdName", dataType: tableau.dataTypeEnum.string },
+  { id: "location", dataType: tableau.dataTypeEnum.string },
+  { id: "volume", dataType: tableau.dataTypeEnum.int},
+  { id: "lat", dataType: tableau.dataTypeEnum.float },
+  { id: "long", dataType: tableau.dataTypeEnum.float },
+  { id: "image", dataType: tableau.dataTypeEnum.string },
+  { id: "family", dataType: tableau.dataTypeEnum.string },
+  { id: "status", dataType: tableau.dataTypeEnum.string },
+  { id: "wingspan", dataType: tableau.dataTypeEnum.float }
+];
 document.getElementById('fetchBirdsBtn').addEventListener('click', async () => {
 const zip = document.getElementById('zipInput').value.trim();
 const locationStatus = document.getElementById('locationStatus');
@@ -23,24 +34,30 @@ const locationStatus = document.getElementById('locationStatus');
 
     birdData.forEach(async bird => {
         let birdInfo = await getBirdData(bird.comName);
-        let nearByBird = {
-            birdName : bird.comName,
-            location : bird.locName,
-            volume : bird.howMany,
-            lat : bird.lat,
-            long : bird.lng,
-            image : birdInfo.images[0] ? birdInfo.images[0]:"",
-            family : birdInfo.family,
-            status : birdInfo.status,
-            wingSpan : birdInfo.wingspanMax
-        }
+        let nearByBird = [
+            bird.comName,
+            bird.locName,
+            bird.howMany,
+            bird.lat,
+            bird.lng,
+            birdInfo.images[0] ? birdInfo.images[0]:"",
+            birdInfo.family,
+            birdInfo.status,
+            birdInfo.wingspanMax
+        ]
         localBirdData.push(nearByBird)
     })
-
     localBirdData.forEach( bird =>{
-   
-        console.log(bird.status,bird.birdName)
+      dataTable.addRow(bird);
     })
+    tableau.extensions.dashboardContent.dashboard.publishDataSourceAsync({
+      id: "BirdObservations",
+      tables: [dataTable]
+    }).then(() => {
+      console.log("✅ Bird data published to Tableau.");
+    }).catch(err => {
+      console.error("❌ Failed to publish data:", err.message);
+    });
   } catch (err) {
     locationStatus.textContent = "❌ Error: " + err.message;
   } 
@@ -73,6 +90,7 @@ function main(){
     if (window.tableau) {
         tableau.extensions.initializeAsync().then(() => {
             log('Running inside Tableau');
+            const dataTable = new tableau.Table(columns);
         }).catch(err => {
             output.textContent = `Extension failed to initialize: ${err.message}`;
             log('Initialization error:', err);

@@ -14,6 +14,7 @@
        </icon>
             <permissions>
               <permission>full data</permission>
+              <permission>dataSources</permission>
             </permissions>
      </dashboard-extension>
      <resources>
